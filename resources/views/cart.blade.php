@@ -75,7 +75,7 @@
                                             <table class="table table-borderless">
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">#</th>
+                                                        <th scope="col">SN</th>
                                                         <th scope="col">Action</th>                                               
                                                         <th scope="col">Photo</th>
                                                         <th scope="col">Product</th>
@@ -85,7 +85,9 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    
                                                 @foreach( $products as $item  )
+                                                
                                                     <tr>
                                                          
 
@@ -96,17 +98,16 @@
                                                          </td>
                                                         <td><img src="{{ asset ('public/image/'. $item->product_image) }}" class="img-fluid" width="35" alt="product"></td>
                                                         <td>{{ $item->product_name}}</td>
-                                                        <td class="cart-product-hour">
-                                                        <div class="qty">
-    	                                                <span id="dec" onclick="dec()">-</span>
-    	                                                 <input type="text" id="qty" value="1" />
-    	                                                      <span id="inc" onclick="inc()">+</span>
-                                                                  </div>
-                                                        </td>
+                                                         <td>{{ $item->time}}</td> 
                                                         <td id='price'>{{ $item->product_price}}</td>
-                                                        <td class="text-right">$500</td>
+                                                        @php  $def=$item->product_price*$item->time;  @endphp
+
+
+
+                                                        <td class="text-right"  id="total"  >{{$def}}</td>
                                                         
                                                     </tr>
+                                                    
                                                     @endforeach
                                                      
                                                     </tbody>
@@ -117,19 +118,16 @@
                                         <div class="row">
                                             <div class="col-md-12 order-2 order-lg-1 col-lg-5 col-xl-6">
                                                 <div class="order-note">
-                                                    <form>
+                                                    <form action="/cart">
                                                         <div class="form-group">
                                                             <div class="input-group">
-                                                                <input type="search" class="form-control" placeholder="Coupon Code" aria-label="Search" aria-describedby="button-addonTags">
+                                                                <input type="text" class="form-control" name="discount" placeholder="Enter Student ID to get Discount" aria-label="Search" aria-describedby="button-addonTags">
                                                                 <div class="input-group-append">
-                                                                    <button class="input-group-text" type="submit" id="button-addonTags">Apply</button>
+                                                                    <input  type="Submit" class="input-group-text" type="submit" id="button-addonTags"/>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="specialNotes">Special Note for this order:</label>
-                                                            <textarea class="form-control" name="specialNotes" id="specialNotes" rows="3" placeholder="Message here"></textarea>
-                                                        </div>
+                                                        
                                                     </form>
                                                 </div>
                                             </div>
@@ -175,27 +173,26 @@
     </div>
     </div>
  
-      <script type="text/javascript">
-      /*Increament*/
-    	function inc() {
-    		var qty = document.getElementById('qty').value;
-    		qty++;
-    		if(qty <= 10) {
-    			document.getElementById('qty').value = qty;
-    		}
-    	}
+      
 
-    	/*Decrement*/
-    	function dec() {
-    		var qty = document.getElementById('qty').value;
-    		qty--;
-    		if(qty > 0){
-    			document.getElementById('qty').value = qty;
-    		}
-    	}
-    </script>
+<script>
+    $(document).ready(function(){
+        $('.increment-btn').click(function(e){
+            e.PreventDefault();
+            var inc_value=$(.'qty-hrs').val();
+            var value=parseInt(inc_value,10);
+            value= isNaN(value) ? 0 :value;
+            if(value<10){
+                value++
+                $(.'qty-hrs').val(value);
+            }
 
+        });
 
+        
+
+    });
+</script>
 
     
 
@@ -203,3 +200,4 @@
 
 
 @endsection
+

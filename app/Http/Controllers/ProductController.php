@@ -70,9 +70,18 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        
+
+        $search=$request->input('search');
+        $products =Product::where('product_name','LIKE','%'.$search.'%')->get();
+        return view('search',[
+            'search'=>$search,
+            'products'=>$products
+            
+        ]);
+        
     }
 
     /**

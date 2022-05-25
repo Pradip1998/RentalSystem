@@ -1,58 +1,40 @@
 <style>
-    body{
-
-background: #d1d5db;
+    * {
+  box-sizing: border-box;
 }
 
-.height{
-
-height: 20vh;
+/* Style the search field */
+form.example input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
 }
 
-.form{
-
-position: relative;
+/* Style the submit button */
+form.example button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none; /* Prevent double borders */
+  cursor: pointer;
 }
 
-.form .fa-search{
-
-position: absolute;
-top:2px;
-left: 20px;
-color: #9ca3af;
-
+form.example button:hover {
+  background: #0b7dda;
 }
 
-.form span{
-
-    position: absolute;
-right: 17px;
-top: 10px;
-padding: 2px;
-border-left: 1px solid #d1d5db;
-
-}
-
-.left-pan{
-padding-left: 7px;
-}
-
-.left-pan i{
-
-padding-left: 10px;
-}
-
-.form-input{
-
-height: 55px;
-text-indent: 33px;
-border-radius: 10px;
-}
-
-.form-input:focus{
-
-box-shadow: none;
-border:none;
+/* Clear floats */
+form.example::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 </style>
 
@@ -73,11 +55,10 @@ border:none;
 
               <div class="col-md-6">
 
-                <div class="form">
-                  <i class="fa fa-search"></i>
-                  <input type="text" class="form-control form-input" placeholder="Search anything...">
-                  <span class="left-pan"><i class="fa fa-microphone"></i></span>
-                </div>
+              <form  class="example" action="/search" method="GET" >
+                      <input type="text" placeholder="Search.." name="search" required> 
+                    <input type="Submit" Value="Search"><i class="fa fa-search"></i></input>
+               </form>
                 
               </div>
               
@@ -99,7 +80,7 @@ border:none;
                     <p class="card-text"><small class="text-muted">{{ $product->created_at  }}</small></p>
                    
                     <a href="{{url ('/detail',$product->id) }}" class="btn btn-primary"  >View Details</a>
-                    <a href=""class="btn btn-success "  >Rent </a>
+                    <a href="{{url ('/addtocart',$product->id) }}"class="btn btn-success "  >Rent </a>
                 </div>
             </div>
         </div>

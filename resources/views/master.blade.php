@@ -34,7 +34,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container">
-       <a href="index.html" class="navbar-brand"><img src="{{ asset ('img/utas-logo.jpg') }}" style="margin-right:20px;">UTAS COMPUTER RENTAL SERVICE</a>
+       <a href="/index" class="navbar-brand"><img src="{{ asset ('img/utas-logo.jpg') }}" style="margin-right:20px;">UTAS COMPUTER RENTAL SERVICE</a>
 
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -45,7 +45,11 @@
             <li class="nav-item">
               <a href="home" class="nav-link">Home</a>
             </li>
-            
+            @if(Auth::check())
+            <li class="nav-item">
+              <a href="/cart" class="nav-link">Cart</a>
+            </li>
+            @endif
             @if(Auth::check())
             <li class="nav-item">
               <a href="profile" class="nav-link">Profile</a>

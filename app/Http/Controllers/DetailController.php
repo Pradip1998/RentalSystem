@@ -20,11 +20,23 @@ class DetailController extends Controller
      */
     public function index(Request $request)
     {
+        $Student_number=$request->input('discount');
         $user_id=$request->user()->id;
-        $products = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->select('products.*','cart_products.id as cart_id')->get();
+        $products = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->select('products.*','cart_products.id as cart_id','cart_products.time')->get();
         $sum = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->sum('Products.product_price');
         $total=0;
-        $total=$sum+50+10;      
+        $discount=0;
+        if($Student_number==1111)
+        {   
+            $discount=$sum*0.10; 
+            $afterdis=$sum-$discount;
+            $total=$afterdis+50+10;
+        }
+        else{
+             
+            $total=$sum+50+10;  
+        }
+              
    
      
         return view('cart',['products'=>$products,'sum'=>$sum,'total'=>$total]);
@@ -49,13 +61,30 @@ class DetailController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $id)
-    {
-        $cart_product=new cart_product;
-        $cart_product->user_id=$request->user()->id;
-        $cart_product->product_id=$id;
-        $cart_product->save();
-        return redirect('/cart');
-        
+
+    {                     
+        $product_check=Product::where('id',$id)->exists();
+                if($product_check){
+                    if($product=cart_product::where('product_id',$id)->where('user_id',$request->user()->id)->exists()){
+                        return response()->json(['status'=> "Already In the cart"]);
+
+                    }
+                    else{
+                        $cart_product=new cart_product;
+                        $cart_product->user_id=$request->user()->id;
+                        $cart_product->product_id=$id;
+                        $cart_product->save();
+                        return redirect('/cart');
+                    }
+
+                }
+
+               
+ 
+
+
+
+                 
         
         
        

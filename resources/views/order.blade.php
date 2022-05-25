@@ -18,7 +18,7 @@
       <th scope="row">{{ $loop->iteration }}</th>
       <td><img src="{{ asset ('public/image/'. $item->product_image) }}" class="img-fluid" width="35" alt="product"></td>
       <td>{{ $item->product_name}}</td>
-      <td>Time</td>
+      <td>{{$item->time}}</td>
       <td>{{ $item->product_price}}</td>
     </tr>
 @endforeach 
@@ -44,83 +44,34 @@
 
 
 
-<form>
+<form action="/success" method="GET"  enctype="multipart/form-data" >
+
+  @csrf
 
   
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputEmail4">Email</label>
-      <input type="email" class="form-control" id="inputEmail4" value={{ Auth::user()->email  }} placeholder="Email">
+      <input type="email" class="form-control" name="email" id="inputEmail4" value={{ Auth::user()->email  }} placeholder="Email">
     </div>
     <div class="form-group col-md-6">
       <label for="inputPassword4">Name</label>
-      <input type="text" class="form-control" id="name" value="{{ Auth::user()->name  }}"  >
+      <input type="text" class="form-control" name="fullname" value="{{ Auth::user()->name  }}"  >
     </div>
   </div>
   <div class="form-group">
     <label for="inputAddress">Address</label>
-    <input type="text" class="form-control" id="inputAddress"  value="{{Auth::user()->address}}">
+    <input type="text" class="form-control" name="inputAddress"  value="{{Auth::user()->address}}">
   </div>
-    <div class="form-group col-md-4">
-      <label for="inputState">Education</label>
-      <select id="inputState" class="form-control">
-        <option selected>Choose...</option>
-        <option>Master</option>
-        <option>Bachelor</option>
-      </select>
-    </div>
+   
     <div class="form-group col-md-2">
-      <label for="inputphone"></label>
-      <input type="text" class="form-control" value="{{ Auth::user()->phonenumber}}" >
+      <label for="inputphone">Contact Number</label>
+      <input type="text" class="form-control" name="Contact" value="{{ Auth::user()->phonenumber}}" >
     </div>
   </div>
-  <div id="smart-button-container">
-      <div style="text-align: center;">
-        <div id="paypal-button-container"></div>
-      </div>
-    </div>
-  <script src="https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD" data-sdk-integration-source="button-factory"></script>
-  <script>
-    function initPayPalButton() {
-      paypal.Buttons({
-        style: {
-          shape: 'rect',
-          color: 'gold',
-          layout: 'vertical',
-          label: 'paypal',
-          
-        },
-
-        createOrder: function(data, actions) {
-          return actions.order.create({
-            purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
-          });
-        },
-
-        onApprove: function(data, actions) {
-          return actions.order.capture().then(function(orderData) {
-            
-            // Full available details
-            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-
-            // Show a success message within this page, e.g.
-            const element = document.getElementById('paypal-button-container');
-            element.innerHTML = '';
-            element.innerHTML = '<h3>Thank you for your payment!</h3>';
-
-            // Or go to another URL:  actions.redirect('thank_you.html');
-            
-          });
-        },
-
-        onError: function(err) {
-          console.log(err);
-        }
-      }).render('#paypal-button-container');
-    }
-    initPayPalButton();
-  </script>
+  <input type="Submit" value="Order" class="btn btn-success">  
 </form>
+
 
 
 @endsection

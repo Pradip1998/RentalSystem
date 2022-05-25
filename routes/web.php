@@ -63,6 +63,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/home', 'ProductController@store');
 Route::get('/index', 'ProductController@index');
+Route::get('/search', 'ProductController@show');
 Route::get('/detail/{id}', 'DetailController@show');
 
 
@@ -71,6 +72,8 @@ Route::match(['get', 'post'], '/addtocart/{id}','DetailController@store');
 Route::match(['get', 'post'], '/removecart/{id}','DetailController@destroy');
 Route::get('/cart', 'DetailController@index');
 Route::get('/order', 'CartController@index');
+Route::get('/success', 'CartController@store');
+
 });
 
 

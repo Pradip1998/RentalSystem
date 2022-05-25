@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use resources\views\detail;
+use App\Product;
+use App\cart_product;
 
 class CartController extends Controller
 {
@@ -16,7 +18,7 @@ class CartController extends Controller
     public function index(Request $request)
     {
         $user_id=$request->user()->id;
-        $products = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->select('products.*','cart_products.id as cart_id')->get();
+        $products = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->select('products.*','cart_products.id as cart_id','cart_products.time')->get();
         $sum = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->sum('Products.product_price');
         $total=0;
         $total=$sum+50+10;      
@@ -43,8 +45,19 @@ class CartController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        return view('order');
+    {    $user_id=$request->user()->id;  
+        $values=$products = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->select('products.*','cart_products.id as cart_id','cart_products.time')->get()->toJson();
+        return $values;
+        
+        
+        
+
+       // $email=$request->input('email');
+        //$name=$request->input('fullname');
+        //$address=$request->input('inputAddress');
+        //$number=$request->input('Contact');
+        
+        
     }
 
     /**
