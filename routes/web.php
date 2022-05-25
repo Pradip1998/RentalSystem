@@ -73,6 +73,8 @@ Route::match(['get', 'post'], '/removecart/{id}','DetailController@destroy');
 Route::get('/cart', 'DetailController@index');
 Route::get('/order', 'CartController@index');
 Route::get('/success', 'CartController@store');
+Route::get('/profile', 'CartController@show');
+    
 
 });
 

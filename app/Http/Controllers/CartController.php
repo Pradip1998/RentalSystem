@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use resources\views\detail;
 use App\Product;
 use App\cart_product;
+use App\Order;
+use App\OrderItem;
+
 
 class CartController extends Controller
 {
@@ -45,20 +48,47 @@ class CartController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {    $user_id=$request->user()->id;  
-        $values=$products = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->select('products.*','cart_products.id as cart_id','cart_products.time')->get()->toJson();
-        return $values;
-        
+    {  
         
         
 
-       // $email=$request->input('email');
-        //$name=$request->input('fullname');
-        //$address=$request->input('inputAddress');
-        //$number=$request->input('Contact');
-        
+        $user_id=$request->user()->id;
+        $products = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->select('products.*','cart_products.id as cart_id','cart_products.time')->get();
+        $sum = DB::table('cart_products')->join('Products','cart_products.product_id','=','products.id')->where('cart_products.user_id','=',$user_id)->sum('Products.product_price');
+        $total=0;
+        $total=$sum+50+10;
+
+
+        $order=new Order;
+        $order->email=$request->input('email');
+        $order->name=$request->input('fullname');
+        $order->address=$request->input('inputAddress');
+        $order->phonenumber=$request->input('Contact');
+        $order->save();
+        $user_id=$request->user()->id;
+        $cart_product=cart_product::where('user_id',$user_id)->get();
+        foreach($cart_product as $value)
+        {
+            OrderItem::create([
+                'order_id'=>$order->id,
+                'user_id'=>$user_id,
+                'product_id'=>$value->product_id,
+                'time'=>$value->time,
+                'subtotal'=>$sum ,
+                'total'=>$total
+            ]);
+            
+            
+        }
+        $cart_product=cart_product::where('user_id',$user_id)->get();
+        cart_product::destroy($user_id);
+        return redirect('/index')->with('message','Order Placed Successfully');
+      
+            
+       
         
     }
+        
 
     /**
      * Display the specified resource.
@@ -66,9 +96,9 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        return view('userprofile');
     }
 
     /**
